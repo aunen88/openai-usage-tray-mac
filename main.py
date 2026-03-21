@@ -27,6 +27,7 @@ class OpenAIUsageTrayApp(rumps.App):
         self.status: str = "no_key" if not self.settings.api_key else "loading"
         self._backoff_s: int = 60
         self._backoff_pending: bool = False
+        self._backoff_lock: threading.Lock = threading.Lock()
 
         self._build_menu()
 
@@ -105,7 +106,8 @@ class OpenAIUsageTrayApp(rumps.App):
         try:
             data = fetch_usage(self.settings.api_key)
             self._backoff_s = 60
-            self._backoff_pending = False
+            with self._backoff_lock:
+                self._backoff_pending = False
             self.usage = data
             self.status = "ok"
             log.info("Fetched: today=$%.2f month=$%.2f", data.today_cost, data.month_cost)
@@ -127,19 +129,24 @@ class OpenAIUsageTrayApp(rumps.App):
         self._build_menu()
 
     def _schedule_backoff(self) -> None:
-        if self._backoff_pending:
-            return
-        self._backoff_pending = True
+        with self._backoff_lock:
+            if self._backoff_pending:
+                return
+            self._backoff_pending = True
         threading.Timer(self._backoff_s, self._backoff_retry).start()
 
     def _backoff_retry(self) -> None:
-        self._backoff_pending = False
+        with self._backoff_lock:
+            self._backoff_pending = False
         self.status = "loading"
         threading.Thread(target=self._fetch, daemon=True).start()
 
     # ── UI actions ─────────────────────────────────────────────────────────
 
     def _on_refresh(self, _sender) -> None:
+        with self._backoff_lock:
+            if self._backoff_pending:
+                return
         threading.Thread(target=self._fetch, daemon=True).start()
 
     def _on_settings(self, _sender) -> None:
@@ -210,16 +217,23 @@ class OpenAIUsageTrayApp(rumps.App):
 
         # Trigger a fetch if key was set
         if new_key:
-            try:
-                fetch_usage(new_key)
-                rumps.alert("Connection successful!")
-            except AuthError:
-                rumps.alert("Invalid API key — check your key and try again.")
-            except RateLimitError:
-                rumps.alert("Connection OK (rate limited — try again shortly).")
-            except Exception as exc:
-                rumps.alert(f"Connection failed: {exc}")
-            # After test, start normal background polling
+            def _test_and_alert():
+                try:
+                    fetch_usage(new_key)
+                    msg = "Connection successful!"
+                except AuthError:
+                    msg = "Invalid API key — check your key and try again."
+                except RateLimitError:
+                    msg = "Connection OK (rate limited — try again shortly)."
+                except Exception as exc:
+                    msg = f"Connection failed: {exc}"
+
+                def _show(_sender):
+                    rumps.alert(msg)
+
+                rumps.Timer(0, _show).start()
+
+            threading.Thread(target=_test_and_alert, daemon=True).start()
             threading.Thread(target=self._fetch, daemon=True).start()
 
 
