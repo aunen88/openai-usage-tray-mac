@@ -89,7 +89,9 @@ class OpenAIUsageTrayApp(rumps.App):
         PyObjC. The timer fires every 60s and checks elapsed time instead. This means
         refresh_interval changes take effect within 60s without a restart.
         """
-        if self.status in ("ratelimit",) or self._backoff_pending:
+        with self._backoff_lock:
+            pending = self._backoff_pending
+        if self.status == "ratelimit" or pending:
             return
         if self.usage:
             elapsed = (datetime.now() - self.usage.fetched_at).total_seconds()
