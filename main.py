@@ -53,7 +53,7 @@ class OpenAIUsageTrayApp(rumps.App):
                 self.menu.add(rumps.MenuItem(build_last_updated(self.usage)))
         elif self.status == "no_key":
             self.menu.add(rumps.MenuItem("Add API key in Settings"))
-        elif self.status in ("error", "auth_error"):
+        elif self.status == "error":
             self.menu.add(rumps.MenuItem("Invalid API key — check Settings"))
         else:
             self.menu.add(rumps.MenuItem("Loading…"))
@@ -66,7 +66,7 @@ class OpenAIUsageTrayApp(rumps.App):
     def _update_title(self) -> None:
         if self.status == "no_key":
             self.title = "?"
-        elif self.status in ("error", "auth_error"):
+        elif self.status == "error":
             self.title = "!"
         elif self.status == "loading":
             self.title = "…"
@@ -210,7 +210,16 @@ class OpenAIUsageTrayApp(rumps.App):
 
         # Trigger a fetch if key was set
         if new_key:
-            rumps.alert("Testing connection…")
+            try:
+                fetch_usage(new_key)
+                rumps.alert("Connection successful!")
+            except AuthError:
+                rumps.alert("Invalid API key — check your key and try again.")
+            except RateLimitError:
+                rumps.alert("Connection OK (rate limited — try again shortly).")
+            except Exception as exc:
+                rumps.alert(f"Connection failed: {exc}")
+            # After test, start normal background polling
             threading.Thread(target=self._fetch, daemon=True).start()
 
 
