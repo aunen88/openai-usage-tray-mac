@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="420" viewBox="0 0 520 420">
+  <defs>
+    <filter id="shadow" x="-10%" y="-5%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.35)"/>
+    </filter>
+    <filter id="barshadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.4)"/>
+    </filter>
+  </defs>
+
+  <!-- Background (desktop) -->
+  <rect width="520" height="420" fill="#1e2a3a"/>
+  <!-- Subtle desktop texture -->
+  <rect width="520" height="420" fill="url(#desktopgrad)" opacity="0.3"/>
+
+  <!-- macOS menu bar -->
+  <rect x="0" y="0" width="520" height="28" fill="#2c2c2e" filter="url(#barshadow)"/>
+
+  <!-- Apple logo placeholder -->
+  <text x="16" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="15" fill="#ffffff" opacity="0.9"></text>
+
+  <!-- Menu bar items (left side) -->
+  <text x="36" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#ffffff" opacity="0.9">Finder</text>
+  <text x="92" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#ffffff" opacity="0.75">File</text>
+  <text x="122" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#ffffff" opacity="0.75">Edit</text>
+  <text x="154" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#ffffff" opacity="0.75">View</text>
+
+  <!-- Right side system icons -->
+  <text x="400" y="19" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#ffffff" opacity="0.7">100%  22:34</text>
+
+  <!-- Active tray icon highlight (the app item) -->
+  <rect x="340" y="2" width="52" height="24" rx="5" fill="#ffffff" opacity="0.18"/>
+
+  <!-- Tray icon text: $4.20 -->
+  <text x="366" y="19" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" font-weight="500" fill="#ffffff" text-anchor="middle">$4.20</text>
+
+  <!-- Dropdown menu panel -->
+  <rect x="268" y="30" width="234" height="292" rx="8" fill="#2c2c2e" filter="url(#shadow)" opacity="0.97"/>
+  <!-- Top notch/arrow indicator -->
+  <polygon points="362,30 375,30 368.5,23" fill="#2c2c2e" opacity="0.97"/>
+
+  <!-- TODAY row -->
+  <rect x="269" y="31" width="232" height="34" rx="8" fill="transparent"/>
+  <!-- hover highlight (none active) -->
+  <text x="283" y="53" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#ffffff" opacity="0.55">Today</text>
+  <text x="336" y="53" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" font-weight="600" fill="#ffffff">$4.20</text>
+  <text x="388" y="53" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#aaaaaa">2.1M in / 0.8M out</text>
+
+  <!-- THIS MONTH row -->
+  <text x="283" y="76" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#ffffff" opacity="0.55">Month</text>
+  <text x="336" y="76" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" font-weight="600" fill="#ffffff">$31.50</text>
+  <text x="393" y="76" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#aaaaaa">18M in / 6M out</text>
+
+  <!-- Separator 1 -->
+  <line x1="278" y1="89" x2="492" y2="89" stroke="#444444" stroke-width="0.75"/>
+
+  <!-- gpt-4o row -->
+  <text x="283" y="110" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#e0e0e0">gpt-4o</text>
+  <text x="349" y="110" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#6ee7b7">$3.10</text>
+  <text x="396" y="110" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#aaaaaa">1.8M / 0.6M</text>
+
+  <!-- gpt-4o-mini row -->
+  <text x="283" y="131" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#e0e0e0">gpt-4o-mini</text>
+  <text x="383" y="131" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#6ee7b7">$1.10</text>
+  <text x="424" y="131" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#aaaaaa">0.3M / 0.2M</text>
+
+  <!-- o3-mini row -->
+  <text x="283" y="152" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#e0e0e0">o3-mini</text>
+  <text x="349" y="152" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#888888">—</text>
+  <text x="396" y="152" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#aaaaaa">12k / 4k</text>
+
+  <!-- Separator 2 -->
+  <line x1="278" y1="165" x2="492" y2="165" stroke="#444444" stroke-width="0.75"/>
+
+  <!-- Last updated -->
+  <text x="283" y="184" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#888888">Last updated: 22:34</text>
+
+  <!-- Separator 3 -->
+  <line x1="278" y1="196" x2="492" y2="196" stroke="#444444" stroke-width="0.75"/>
+
+  <!-- Refresh (hovered) -->
+  <rect x="270" y="199" width="232" height="26" rx="5" fill="#0a84ff" opacity="0.85"/>
+  <text x="283" y="217" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#ffffff">Refresh</text>
+
+  <!-- Settings -->
+  <text x="283" y="241" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#e0e0e0">Settings</text>
+
+  <!-- Separator 4 -->
+  <line x1="278" y1="253" x2="492" y2="253" stroke="#444444" stroke-width="0.75"/>
+
+  <!-- Quit -->
+  <text x="283" y="272" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#e0e0e0">Quit</text>
+
+  <!-- Bottom rounded cap of menu -->
+  <rect x="268" y="278" width="234" height="44" rx="8" fill="#2c2c2e"/>
+
+  <!-- Warning state badge (small callout in bottom left) -->
+  <rect x="18" y="340" width="196" height="62" rx="10" fill="#1c1c1e" opacity="0.92" filter="url(#shadow)"/>
+  <text x="30" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#ff9f0a">Warning state</text>
+  <rect x="30" y="368" width="60" height="20" rx="5" fill="#2c2c2e"/>
+  <text x="38" y="382" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#ff9f0a">⚠ $51</text>
+  <text x="100" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#ff453a">Critical state</text>
+  <rect x="100" y="368" width="60" height="20" rx="5" fill="#2c2c2e"/>
+  <text x="108" y="382" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#ff453a">🔴 $110</text>
+  <text x="30" y="396" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#888888">Menu bar icon states</text>
+</svg>
