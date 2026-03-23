@@ -115,7 +115,10 @@ def fetch_completions(
         if resp.status_code == 401:
             raise AuthError("HTTP 401 — API key rejected.")
         if resp.status_code == 429:
-            retry_after = int(resp.headers.get("retry-after", 300))
+            try:
+                retry_after = int(resp.headers.get("retry-after", 300))
+            except (ValueError, TypeError):
+                retry_after = 300
             raise RateLimitError(f"Rate limited — retry in {retry_after}s.", retry_after)
         resp.raise_for_status()
 

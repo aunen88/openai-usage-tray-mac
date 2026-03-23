@@ -28,6 +28,7 @@ class OpenAIUsageTrayApp(rumps.App):
         self._backoff_s: int = 60
         self._backoff_pending: bool = False
         self._backoff_lock: threading.Lock = threading.Lock()
+        self._backoff_timer: Optional[threading.Timer] = None
 
         self._build_menu()
 
@@ -135,19 +136,28 @@ class OpenAIUsageTrayApp(rumps.App):
             if self._backoff_pending:
                 return
             self._backoff_pending = True
-        threading.Timer(self._backoff_s, self._backoff_retry).start()
+            self._backoff_timer = threading.Timer(self._backoff_s, self._backoff_retry)
+            self._backoff_timer.daemon = True
+            self._backoff_timer.start()
+
+    def _cancel_backoff(self) -> None:
+        with self._backoff_lock:
+            self._backoff_pending = False
+            if self._backoff_timer is not None:
+                self._backoff_timer.cancel()
+                self._backoff_timer = None
 
     def _backoff_retry(self) -> None:
         with self._backoff_lock:
             self._backoff_pending = False
+            self._backoff_timer = None
         self.status = "loading"
         threading.Thread(target=self._fetch, daemon=True).start()
 
     # ── UI actions ─────────────────────────────────────────────────────────
 
     def _on_refresh(self, _sender) -> None:
-        with self._backoff_lock:
-            self._backoff_pending = False
+        self._cancel_backoff()
         self._backoff_s = 60
         threading.Thread(target=self._fetch, daemon=True).start()
 
