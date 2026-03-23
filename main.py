@@ -118,9 +118,9 @@ class OpenAIUsageTrayApp(rumps.App):
             self.status = "error"
         except RateLimitError as exc:
             if exc.retry_after > 0:
-                self._backoff_s = min(exc.retry_after, 900)
+                self._backoff_s = min(exc.retry_after, 3600)
             else:
-                self._backoff_s = min(self._backoff_s * 2, 900)
+                self._backoff_s = min(self._backoff_s * 2, 3600)
             log.warning("Rate limited — backing off %ds", self._backoff_s)
             self.status = "ratelimit"
             self._schedule_backoff()
@@ -147,8 +147,8 @@ class OpenAIUsageTrayApp(rumps.App):
 
     def _on_refresh(self, _sender) -> None:
         with self._backoff_lock:
-            if self._backoff_pending:
-                return
+            self._backoff_pending = False
+        self._backoff_s = 60
         threading.Thread(target=self._fetch, daemon=True).start()
 
     def _on_settings(self, _sender) -> None:
